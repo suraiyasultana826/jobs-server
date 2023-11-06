@@ -48,6 +48,18 @@ async function run() {
     })
 
     //bids
+
+    app.get('/bidWebdev', async(req, res) => {
+      console.log(req.query.email);
+      let query = {};
+      if(req.query?.email){
+        query = {email:req.query.email}
+      }
+      const result = await webdevCollection.find().toArray();
+      res.send(result);
+    })
+
+
     app.post('/bidWebdev', async(req, res) => {
       const bids = req.body;
       console.log(bids);
