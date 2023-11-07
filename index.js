@@ -53,6 +53,30 @@ async function run() {
       res.send(result);
     })
 
+
+    app.put('/postedJob/:id', async(req, res) => {
+      const id = req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const options = { upsert: true };
+      const updatedJob = req.body;
+      const job = {
+        $set: {
+          email: updatedJob.email,
+          jobTitle: updatedJob.jobTitle,
+          deadline: updatedJob.deadline,
+          description: updatedJob.description,
+          category: updatedJob.category,
+          img: updatedJob.img,
+          minPrice: updatedJob.minPrice, 
+          maxPrice: updatedJob.maxPrice
+        }
+      }
+      const result = await postedJobCollection.updateOne(filter, job, options);
+      res.send(result);
+    })
+
+
+
     app.delete('/postedJob/:id', async(req, res) => {
       const id = req.params.id;
       const query = {_id:new ObjectId(id)}
