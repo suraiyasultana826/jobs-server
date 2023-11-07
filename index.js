@@ -30,6 +30,7 @@ async function run() {
     await client.connect();
 
     const webdevCollection = client.db('category').collection('webdev');
+    const postedJobCollection = client.db('category').collection('postedJob');
     const bidWebdevCollection = client.db('category').collection('bidWebdev');
 
     app.get('/webdev', async(req, res) => {
@@ -37,6 +38,22 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
+
+
+    app.post('/postedJob', async(req, res) => {
+      const newJob = req.body;
+      console.log(newJob);
+      const result = await postedJobCollection.insertOne(newJob);
+      res.send(result);
+    })
+
+    app.get('/postedJob', async(req, res) => {
+      const cursor = postedJobCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+
     app.get('/webdev/:id', async(req, res) => {
       const id = req.params.id;
       const query = {_id: new ObjectId(id)}
