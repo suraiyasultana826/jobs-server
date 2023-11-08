@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
@@ -32,6 +33,18 @@ async function run() {
     const webdevCollection = client.db('category').collection('webdev');
     const postedJobCollection = client.db('category').collection('postedJob');
     const bidWebdevCollection = client.db('category').collection('bidWebdev');
+
+
+    //auth related api
+
+    app.post('/jwt', async(req, res) => {
+      const user = req.body;
+      console.log('user for token', user);
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '1hr'});
+      res.send({token});
+
+    })
+
 
     app.get('/webdev', async(req, res) => {
       const cursor = webdevCollection.find();
